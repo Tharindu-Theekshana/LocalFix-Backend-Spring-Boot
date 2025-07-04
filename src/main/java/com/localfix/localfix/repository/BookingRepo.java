@@ -1,0 +1,7 @@
+package com.localfix.localfix.repository;
+
+import com.localfix.localfix.model.Booking;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface BookingRepo extends JpaRepository<Booking, Integer> {
+}
