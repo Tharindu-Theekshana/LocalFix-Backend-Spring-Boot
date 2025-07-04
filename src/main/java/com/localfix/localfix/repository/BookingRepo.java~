@@ -4,5 +4,5 @@ import com.localfix.localfix.model.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BookingRepo extends JpaRepository<Booking, Integer> {
-
+    
 }
