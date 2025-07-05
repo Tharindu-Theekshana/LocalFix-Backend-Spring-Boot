@@ -1,0 +1,53 @@
+package com.localfix.localfix.service;
+
+import com.localfix.localfix.dto.AuthResponse;
+import com.localfix.localfix.dto.UserDto;
+import com.localfix.localfix.model.User;
+import com.localfix.localfix.repository.UserRepo;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class AuthSerice {
+
+    @Autowired
+    UserRepo userRepo;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    public AuthResponse register(UserDto userDto) {
+
+        if(userRepo.existsByEmail(userDto.getEmail())){
+            return new AuthResponse("User already exists", false);
+        }
+
+        if(!userDto.getPassword().equals(userDto.getConfirmPassword())){
+            return new AuthResponse("Passwords do not match", false);
+        }
+
+        try{
+
+            User user = new User();
+            user.setEmail(userDto.getEmail());
+            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            user.setRole(userDto.getRole());
+
+            User registeredUser = userRepo.save(user);
+            return new AuthResponse("User " + registeredUser.getEmail() + " registered successfully", true);
+
+        }catch (Exception e){
+            return new AuthResponse(("cant register user! : " + e.getMessage()), false);
+        }
+    }
+
+
+
+}
