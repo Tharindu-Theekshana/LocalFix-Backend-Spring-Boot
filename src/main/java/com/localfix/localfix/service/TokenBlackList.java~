@@ -1,0 +1,4 @@
+package com.localfix.localfix.service;
+
+public class TokenBlackList {
+}

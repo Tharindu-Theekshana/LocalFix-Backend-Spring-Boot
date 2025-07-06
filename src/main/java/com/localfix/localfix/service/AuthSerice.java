@@ -30,6 +30,9 @@ public class AuthSerice {
     @Autowired
     JWTService jwtService;
 
+    @Autowired
+    TokenBlackList tokenBlackList;
+
     public AuthResponse register(UserDto userDto) {
 
         if(userRepo.existsByEmail(userDto.getEmail())){
@@ -75,6 +78,25 @@ public class AuthSerice {
 
         } catch (Exception e) {
             return new AuthResponse(("cant login user! : " + e.getMessage()), false,null,null,false);
+        }
+    }
+
+    public AuthResponse logout(String token) {
+
+        if(tokenBlackList.isTokenBlacklisted(token)){
+            return new AuthResponse("User already logged out", false,null,null,false);
+        }
+
+        try{
+
+            if (token != null) {
+                tokenBlackList.blacklisToken(token);
+                return new AuthResponse("User logged out successfully", true,null,null,false);
+            }
+            return new AuthResponse("Invalid token! ", false,null,null,false);
+
+        } catch (Exception e) {
+            return new AuthResponse(("cant logout user! : " + e.getMessage()), false,null,null,false);
         }
     }
 }
