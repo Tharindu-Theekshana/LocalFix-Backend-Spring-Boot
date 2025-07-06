@@ -26,11 +26,11 @@ public class AuthSerice {
     public AuthResponse register(UserDto userDto) {
 
         if(userRepo.existsByEmail(userDto.getEmail())){
-            return new AuthResponse("User already exists", false);
+            return new AuthResponse("User already exists", false,null,null,false);
         }
 
         if(!userDto.getPassword().equals(userDto.getConfirmPassword())){
-            return new AuthResponse("Passwords do not match", false);
+            return new AuthResponse("Passwords do not match", false,null,null,false);
         }
 
         try{
@@ -41,10 +41,10 @@ public class AuthSerice {
             user.setRole(userDto.getRole());
 
             User registeredUser = userRepo.save(user);
-            return new AuthResponse("User " + registeredUser.getEmail() + " registered successfully", true);
+            return new AuthResponse("User " + registeredUser.getEmail() + " registered successfully", true,null,null,false);
 
         }catch (Exception e){
-            return new AuthResponse(("cant register user! : " + e.getMessage()), false);
+            return new AuthResponse(("cant register user! : " + e.getMessage()), false,null,null,false);
         }
     }
 
