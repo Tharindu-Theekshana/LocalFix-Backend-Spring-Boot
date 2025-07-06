@@ -43,7 +43,6 @@ public class Profile {
     private String description;
 
     @CreationTimestamp
-    @NotNull(message = "created_date is required")
     @Column(name = "created_date")
     private LocalDate createdDate;
 

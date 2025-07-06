@@ -33,9 +33,8 @@ public class JWTService {
 
     private long expirationDate = 86400000;
 
-    public String generateToken(String email) {
-
-        Map<String, Object> claims = new HashMap<>();
+    public String generateToken(String email){
+        Map<String , Object> claims = new HashMap<>();
 
         return Jwts.builder()
                 .claims()
@@ -49,7 +48,7 @@ public class JWTService {
     }
 
     private SecretKey getKey() {
-        byte[] keyBytes = Decoders.BASE64URL.decode(secretKey);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
