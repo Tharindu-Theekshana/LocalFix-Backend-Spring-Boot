@@ -23,11 +23,4 @@ public class AuthController {
         AuthResponse response = authSerice.register(userDto);
         return ResponseEntity.ok(response);
     }
-
-    @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody UserDto userDto){
-
-        AuthResponse response = authSerice.login(userDto);
-        return ResponseEntity.ok(response);
-    }
 }

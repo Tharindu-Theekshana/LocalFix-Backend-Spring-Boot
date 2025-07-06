@@ -6,11 +6,7 @@ import com.localfix.localfix.model.User;
 import com.localfix.localfix.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +22,6 @@ public class AuthSerice {
 
     @Autowired
     AuthenticationManager authenticationManager;
-
-    @Autowired
-    JWTService jwtService;
 
     public AuthResponse register(UserDto userDto) {
 
@@ -58,23 +51,6 @@ public class AuthSerice {
 
     public AuthResponse login(UserDto userDto) {
 
-        try{
-
-            User user = userRepo.findByEmail(userDto.getEmail()).orElseThrow(() -> new UsernameNotFoundException("User not found!"));
-
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword()));
-
-            if(authentication.isAuthenticated()){
-
-                String token = jwtService.generateToken(user.getEmail());
-                return new AuthResponse("User " + user.getEmail() + " logged in successfully", true,token,user.getRole(),true);
-            }else{
-                return new AuthResponse("User " + user.getEmail() + " logged in failed", false,null,null,false);
-            }
-
-        } catch (Exception e) {
-            return new AuthResponse(("cant login user! : " + e.getMessage()), false,null,null,false);
-        }
+        
     }
 }
