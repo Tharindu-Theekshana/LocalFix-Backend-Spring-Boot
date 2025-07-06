@@ -36,4 +36,10 @@ public class ProfileController {
         return profileService.getAllProfiles(token);
     }
 
+    @GetMapping("/getById/{id}")
+    public ResponseEntity<ProfileDto> getById(@PathVariable int id){
+        return profileService.getProfileById(id);
+    }
+
+
 }

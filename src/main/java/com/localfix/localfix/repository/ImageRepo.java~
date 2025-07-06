@@ -1,4 +1,0 @@
-package com.localfix.localfix.repository;
-
-public interface ImageRepo {
-}

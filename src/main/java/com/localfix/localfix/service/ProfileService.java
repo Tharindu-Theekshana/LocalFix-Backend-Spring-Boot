@@ -140,4 +140,37 @@ public class ProfileService {
             throw  new RuntimeException("You must login to update profile status!");
         }
     }
+
+    public ResponseEntity<ProfileDto> getProfileById(int id) {
+
+        try{
+            Profile profile = profileRepo.findById(id).orElseThrow(()-> new RuntimeException("no profile!"));
+
+            ProfileDto profileDto = new ProfileDto();
+            profileDto.setId(profile.getId());
+            profileDto.setName(profile.getName());
+            profileDto.setBio(profile.getBio());
+            profileDto.setLocation(profile.getLocation());
+            profileDto.setExperience(profile.getExperience());
+            profileDto.setDescription(profile.getDescription());
+            profileDto.setPrice(profile.getPrice());
+            profileDto.setServiceCategory(profile.getServiceCategory());
+            profileDto.setPhoneNumber(profile.getPhoneNumber());
+            profileDto.setWorkerId(profile.getWorker().getId());
+
+            if(profile.getImage() != null){
+                String profileImage = Base64.getEncoder().encodeToString(profile.getImage());
+                profileDto.setProfileImage(profileImage);
+            }
+
+            List<Image> images = imageRepo.findByProfileId(profile.getId());
+            List<String> imageBase64List = images.stream().map(img -> "data:" + img.getContentype() + ";base64," + Base64.getEncoder().encodeToString(img.getData())).toList();
+            profileDto.setImages(imageBase64List);
+
+            return ResponseEntity.ok(profileDto);
+
+        } catch (RuntimeException e) {
+            throw new RuntimeException("cant get profile by id " + e.getMessage());
+        }
+    }
 }
