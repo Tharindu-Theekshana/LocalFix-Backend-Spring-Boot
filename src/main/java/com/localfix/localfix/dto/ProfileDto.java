@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProfileDto {
 
+    private int id;
     private String name;
     private String serviceCategory;
     private String location;
@@ -20,4 +21,5 @@ public class ProfileDto {
     private int phoneNumber;
     private int experience;
     private int workerId;
+    private String profileImage;
 }

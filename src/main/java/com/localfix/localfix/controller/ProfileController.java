@@ -30,4 +30,10 @@ public class ProfileController {
         ProfileResponse response = profileService.updateProfileStatus(token,id,status);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/getAllProfiles")
+    public ResponseEntity<List<ProfileDto>> getAllProfiles(@RequestHeader("Authorization") String token){
+        return profileService.getAllProfiles(token);
+    }
+
 }
