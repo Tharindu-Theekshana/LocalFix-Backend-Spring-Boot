@@ -41,5 +41,13 @@ public class ProfileController {
         return profileService.getProfileById(id);
     }
 
+    @GetMapping("/getPendingProfiles")
+    public ResponseEntity<List<ProfileDto>> getPendingProfiles(@RequestHeader("Authorization") String token){
+        return profileService.getPendingProfiles(token);
+    }
+
+
+
+
 
 }

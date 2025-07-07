@@ -173,4 +173,46 @@ public class ProfileService {
             throw new RuntimeException("cant get profile by id " + e.getMessage());
         }
     }
+
+    public ResponseEntity<List<ProfileDto>> getPendingProfiles(String token) {
+
+        if (!tokenBlackList.isTokenBlacklisted(token)) {
+            try{
+
+                String status = "pending";
+
+                List<Profile> profiles = profileRepo.findByStatus(status);
+                List<ProfileDto> profileDtos = profiles.stream().map(profile -> {
+
+                    ProfileDto profileDto = new ProfileDto();
+                    profileDto.setId(profile.getId());
+                    profileDto.setName(profile.getName());
+                    profileDto.setBio(profile.getBio());
+                    profileDto.setLocation(profile.getLocation());
+                    profileDto.setExperience(profile.getExperience());
+                    profileDto.setDescription(profile.getDescription());
+                    profileDto.setPrice(profile.getPrice());
+                    profileDto.setServiceCategory(profile.getServiceCategory());
+                    profileDto.setPhoneNumber(profile.getPhoneNumber());
+                    profileDto.setWorkerId(profile.getWorker().getId());
+
+                    if(profile.getImage() != null){
+                        String profileImage = Base64.getEncoder().encodeToString(profile.getImage());
+                        profileDto.setProfileImage(profileImage);
+                    }
+
+                    return profileDto;
+                }).toList();
+
+                return ResponseEntity.ok(profileDtos);
+
+
+            } catch (RuntimeException e) {
+                throw new RuntimeException("cant get pending events : " + e.getMessage());
+            }
+
+        }else {
+            throw  new RuntimeException("You must login to update profile status!");
+        }
+    }
 }
