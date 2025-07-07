@@ -119,6 +119,7 @@ public class ProfileService {
                     profileDto.setPrice(profile.getPrice());
                     profileDto.setServiceCategory(profile.getServiceCategory());
                     profileDto.setPhoneNumber(profile.getPhoneNumber());
+                    profileDto.setStatus(profile.getStatus());
                     profileDto.setWorkerId(profile.getWorker().getId());
 
                     if(profile.getImage() != null){
@@ -156,6 +157,7 @@ public class ProfileService {
             profileDto.setPrice(profile.getPrice());
             profileDto.setServiceCategory(profile.getServiceCategory());
             profileDto.setPhoneNumber(profile.getPhoneNumber());
+            profileDto.setStatus(profile.getStatus());
             profileDto.setWorkerId(profile.getWorker().getId());
 
             if(profile.getImage() != null){
@@ -194,6 +196,7 @@ public class ProfileService {
                     profileDto.setPrice(profile.getPrice());
                     profileDto.setServiceCategory(profile.getServiceCategory());
                     profileDto.setPhoneNumber(profile.getPhoneNumber());
+                    profileDto.setStatus(profile.getStatus());
                     profileDto.setWorkerId(profile.getWorker().getId());
 
                     if(profile.getImage() != null){
@@ -212,7 +215,93 @@ public class ProfileService {
             }
 
         }else {
-            throw  new RuntimeException("You must login to update profile status!");
+            throw  new RuntimeException("You must login first!");
+        }
+    }
+
+    public ResponseEntity<List<ProfileDto>> getApprovedProfiles(String token) {
+
+        if (!tokenBlackList.isTokenBlacklisted(token)) {
+            try{
+
+                String status = "approved";
+
+                List<Profile> profiles = profileRepo.findByStatus(status);
+                List<ProfileDto> profileDtos = profiles.stream().map(profile -> {
+
+                    ProfileDto profileDto = new ProfileDto();
+                    profileDto.setId(profile.getId());
+                    profileDto.setName(profile.getName());
+                    profileDto.setBio(profile.getBio());
+                    profileDto.setLocation(profile.getLocation());
+                    profileDto.setExperience(profile.getExperience());
+                    profileDto.setDescription(profile.getDescription());
+                    profileDto.setPrice(profile.getPrice());
+                    profileDto.setServiceCategory(profile.getServiceCategory());
+                    profileDto.setPhoneNumber(profile.getPhoneNumber());
+                    profileDto.setStatus(profile.getStatus());
+                    profileDto.setWorkerId(profile.getWorker().getId());
+
+                    if(profile.getImage() != null){
+                        String profileImage = Base64.getEncoder().encodeToString(profile.getImage());
+                        profileDto.setProfileImage(profileImage);
+                    }
+
+                    return profileDto;
+                }).toList();
+
+                return ResponseEntity.ok(profileDtos);
+
+
+            } catch (RuntimeException e) {
+                throw new RuntimeException("cant get approved events : " + e.getMessage());
+            }
+
+        }else {
+            throw  new RuntimeException("You must login first!");
+        }
+    }
+
+    public ResponseEntity<List<ProfileDto>> getDeclinedProfiles(String token) {
+
+        if (!tokenBlackList.isTokenBlacklisted(token)) {
+            try{
+
+                String status = "declined";
+
+                List<Profile> profiles = profileRepo.findByStatus(status);
+                List<ProfileDto> profileDtos = profiles.stream().map(profile -> {
+
+                    ProfileDto profileDto = new ProfileDto();
+                    profileDto.setId(profile.getId());
+                    profileDto.setName(profile.getName());
+                    profileDto.setBio(profile.getBio());
+                    profileDto.setLocation(profile.getLocation());
+                    profileDto.setExperience(profile.getExperience());
+                    profileDto.setDescription(profile.getDescription());
+                    profileDto.setPrice(profile.getPrice());
+                    profileDto.setServiceCategory(profile.getServiceCategory());
+                    profileDto.setPhoneNumber(profile.getPhoneNumber());
+                    profileDto.setStatus(profile.getStatus());
+                    profileDto.setWorkerId(profile.getWorker().getId());
+
+                    if(profile.getImage() != null){
+                        String profileImage = Base64.getEncoder().encodeToString(profile.getImage());
+                        profileDto.setProfileImage(profileImage);
+                    }
+
+                    return profileDto;
+                }).toList();
+
+                return ResponseEntity.ok(profileDtos);
+
+
+            } catch (RuntimeException e) {
+                throw new RuntimeException("cant get approved events : " + e.getMessage());
+            }
+
+        }else {
+            throw  new RuntimeException("You must login first!");
         }
     }
 }

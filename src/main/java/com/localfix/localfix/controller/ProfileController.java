@@ -46,6 +46,16 @@ public class ProfileController {
         return profileService.getPendingProfiles(token);
     }
 
+    @GetMapping("/getApprovedProfiles")
+    public ResponseEntity<List<ProfileDto>> getApprovedProfiles(@RequestHeader("Authorization") String token){
+        return profileService.getApprovedProfiles(token);
+    }
+
+    @GetMapping("/getDeclinedProfiles")
+    public ResponseEntity<List<ProfileDto>> getDeclinedProfiles(@RequestHeader("Authorization") String token){
+        return profileService.getDeclinedProfiles(token);
+    }
+
 
 
 

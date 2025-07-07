@@ -25,4 +25,5 @@ public class ProfileDto {
     private int workerId;
     private String profileImage;
     private List<String> images;
+    private String status;
 }
