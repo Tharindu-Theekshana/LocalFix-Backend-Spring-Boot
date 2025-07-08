@@ -48,7 +48,7 @@ public class Profile {
 
     @Positive(message = "phone_number is required")
     @Column(name = "phone_number")
-    private long phoneNumber;
+    private int phoneNumber;
 
     @NotBlank(message = "status is required")
     private String status = "pending";

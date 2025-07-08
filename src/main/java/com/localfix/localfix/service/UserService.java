@@ -94,7 +94,7 @@ public class UserService {
             }
 
         }else {
-           return new Response("You must login to update profile status!", false);
+           return new Response("You must login first!", false);
         }
     }
 }

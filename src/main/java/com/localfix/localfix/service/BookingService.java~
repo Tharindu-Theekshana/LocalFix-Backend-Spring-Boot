@@ -1,0 +1,34 @@
+package com.localfix.localfix.service;
+
+import com.localfix.localfix.dto.BookingDto;
+import com.localfix.localfix.dto.Response;
+import com.localfix.localfix.repository.BookingRepo;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class BookingService {
+
+    @Autowired
+    TokenBlackList tokenBlackList;
+
+    @Autowired
+    BookingRepo bookingRepo;
+
+    public Response makeBooking(String token, BookingDto bookingDto) {
+        if (!tokenBlackList.isTokenBlacklisted(token)) {
+
+            try{
+                
+
+            }catch (Exception e){
+                return new Response("Cant make booking : " + e.getMessage(), false);
+            }
+
+        }else {
+            return new Response("You must login first!", false);
+        }
+    }
+}

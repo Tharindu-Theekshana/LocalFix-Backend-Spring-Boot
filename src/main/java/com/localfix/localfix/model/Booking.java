@@ -24,7 +24,6 @@ public class Booking {
     private int id;
 
     @CreationTimestamp
-    @NotNull(message = "booked_date is required")
     @Column(name = "booked_date")
     private LocalDate bookedDate;
 
@@ -50,7 +49,7 @@ public class Booking {
 
     @Positive(message = "telephone number is required")
     @Column(name = "phone_number")
-    private int phoneNumber;
+    private long phoneNumber;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id", nullable = false)

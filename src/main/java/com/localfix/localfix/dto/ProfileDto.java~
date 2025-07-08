@@ -20,7 +20,7 @@ public class ProfileDto {
     private double price;
     private String bio;
     private String description;
-    private long phoneNumber;
+    private int phoneNumber;
     private int experience;
     private int workerId;
     private String profileImage;
