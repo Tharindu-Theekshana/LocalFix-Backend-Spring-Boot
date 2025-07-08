@@ -62,10 +62,17 @@ public class ProfileController {
     }
 
     @PutMapping("/updateProfile/{id}")
-    public ResponseEntity<ProfileResponse> updateProfile(@RequestHeader("Authorization") String token, @RequestBody ProfileDto profileDto, @PathVariable int id){
-        ProfileResponse response = profileService.updateProfile(token,profileDto,id);
+    public ResponseEntity<ProfileResponse> updateProfile(@RequestHeader("Authorization") String token, @RequestPart("profile") ProfileDto profileDto, @PathVariable int id,@RequestPart("profileImage")MultipartFile profileImage,@RequestPart("images")List<MultipartFile> images){
+        ProfileResponse response = profileService.updateProfile(token,profileDto,id,images,profileImage);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/searchProfile")
+    public ResponseEntity<List<ProfileDto>> searchProfile(@RequestParam(required = false) String category, @RequestParam(required = false) String location){
+        return profileService.searchProfile(category,location);
+    }
+
+
 
 
 

@@ -9,4 +9,8 @@ public interface ProfileRepo extends JpaRepository<Profile, Integer> {
     List<Profile> findByStatus(String status);
 
     List<Profile> findByStatusAndServiceCategory(String status, String category);
+
+    List<Profile> findByStatusAndServiceCategoryAndLocation(String status, String category, String location);
+
+    List<Profile> findByStatusAndLocation(String status, String location);
 }

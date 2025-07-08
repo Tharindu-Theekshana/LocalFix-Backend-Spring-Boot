@@ -341,14 +341,45 @@ public class ProfileService {
         }
     }
 
-    public ProfileResponse updateProfile(String token, ProfileDto profileDto, int id) {
+    public ProfileResponse updateProfile(String token, ProfileDto profileDto, int id,List<MultipartFile> images,MultipartFile profileImage) {
         if (!tokenBlackList.isTokenBlacklisted(token)) {
 
             try{
 
                 Profile profile = profileRepo.findById(id).orElseThrow(()-> new RuntimeException("no profile found!"));
 
-                
+                profile.setName(profileDto.getName());
+                profile.setBio(profileDto.getBio());
+                profile.setLocation(profileDto.getLocation());
+                profile.setExperience(profileDto.getExperience());
+                profile.setDescription(profileDto.getDescription());
+                profile.setPrice(profileDto.getPrice());
+                profile.setServiceCategory(profileDto.getServiceCategory());
+                profile.setPhoneNumber(profileDto.getPhoneNumber());
+
+                if(profileImage != null && !profileImage.isEmpty()){
+                    profile.setImage(profileImage.getBytes());
+                }
+
+                Profile savedProfile = profileRepo.save(profile);
+
+                List<Image> imageList = new ArrayList<>();
+                if (images != null && !images.isEmpty()) {
+                    for (MultipartFile file : images) {
+                        if (!file.isEmpty()) {
+                            Image img = new Image();
+                            img.setData(file.getBytes());
+                            img.setContentype(file.getContentType());
+                            img.setProfile(savedProfile);
+                            imageList.add(img);
+                        }
+
+                    }
+                    imageRepo.saveAll(imageList);
+                }
+
+                return new ProfileResponse("Profile updated successfully!",true);
+
 
             }catch (Exception e){
                 return new ProfileResponse("cant update profile! : " + e.getMessage(), false);
@@ -356,6 +387,48 @@ public class ProfileService {
 
         }else {
             return new ProfileResponse("You must login to update profile status!", false);
+        }
+    }
+
+    public ResponseEntity<List<ProfileDto>> searchProfile(String category, String location) {
+        try{
+            String status = "approved";
+            List<Profile> profiles;
+
+            if(location == null || location.trim().isEmpty()){
+                 profiles = profileRepo.findByStatusAndServiceCategory(status,category);
+            } else if (category == null) {
+                 profiles = profileRepo.findByStatusAndLocation(status,location);
+            }else {
+                 profiles = profileRepo.findByStatusAndServiceCategoryAndLocation(status, category, location);
+
+            }
+            List<ProfileDto> profileDtos = profiles.stream().map(profile -> {
+
+                ProfileDto profileDto = new ProfileDto();
+                profileDto.setId(profile.getId());
+                profileDto.setName(profile.getName());
+                profileDto.setBio(profile.getBio());
+                profileDto.setLocation(profile.getLocation());
+                profileDto.setExperience(profile.getExperience());
+                profileDto.setDescription(profile.getDescription());
+                profileDto.setPrice(profile.getPrice());
+                profileDto.setServiceCategory(profile.getServiceCategory());
+                profileDto.setPhoneNumber(profile.getPhoneNumber());
+                profileDto.setWorkerId(profile.getWorker().getId());
+
+                if(profile.getImage() != null){
+                    String profileImage = Base64.getEncoder().encodeToString(profile.getImage());
+                    profileDto.setProfileImage(profileImage);
+                }
+
+                return profileDto;
+            }).toList();
+
+            return ResponseEntity.ok(profileDtos);
+
+        } catch (RuntimeException e) {
+            throw new RuntimeException("can search profile : " + e.getMessage());
         }
     }
 }
