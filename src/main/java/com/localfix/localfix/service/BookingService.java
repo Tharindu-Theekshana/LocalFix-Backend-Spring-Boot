@@ -62,12 +62,11 @@ public class BookingService {
         }
     }
 
-    public ResponseEntity<List<BookingDto>> getBookingsOfEachWorker(String token, int id) {
+    public ResponseEntity<List<BookingDto>> getBookingsOfEachWorker(String token, int id,String status) {
         if (!tokenBlackList.isTokenBlacklisted(token)) {
 
             try{
 
-                String status = "pending";
 
                 Profile profile = profileRepo.findById(id).orElseThrow(()-> new RuntimeException("no profile found"));
                 List<Booking> bookings = bookingRepo.findByProfileAndStatus(profile,status);
@@ -98,77 +97,6 @@ public class BookingService {
         }
     }
 
-    public ResponseEntity<List<BookingDto>> getApprovedBookingsOfEachWorker(String token, int id) {
-        if (!tokenBlackList.isTokenBlacklisted(token)) {
-
-            try{
-
-                String status = "approved";
-
-                Profile profile = profileRepo.findById(id).orElseThrow(()-> new RuntimeException("no profile found"));
-                List<Booking> bookings = bookingRepo.findByProfileAndStatus(profile,status);
-                List<BookingDto> bookingDtos = bookings.stream().map(booking -> {
-
-                    BookingDto bookingDto = new BookingDto();
-                    bookingDto.setId(booking.getId());
-                    bookingDto.setBookedDate(booking.getBookedDate());
-                    bookingDto.setBookingDate(booking.getBookingDate());
-                    bookingDto.setBookingTime(booking.getBookingTime());
-                    bookingDto.setDescription(booking.getDescription());
-                    bookingDto.setUrgency(booking.getUrgency());
-                    bookingDto.setLocation(booking.getLocation());
-                    bookingDto.setPhoneNumber(booking.getPhoneNumber());
-                    bookingDto.setStatus(booking.getStatus());
-
-                    return bookingDto;
-                }).toList();
-
-                return ResponseEntity.ok(bookingDtos);
-
-            } catch (RuntimeException e) {
-                throw new RuntimeException("cant get bookings : " + e.getMessage());
-            }
-
-        }else {
-            throw  new RuntimeException("You must login to update profile status!");
-        }
-    }
-
-    public ResponseEntity<List<BookingDto>> getDeclinedBookingsOfEachWorker(String token, int id) {
-        if (!tokenBlackList.isTokenBlacklisted(token)) {
-
-            try{
-
-                String status = "declined";
-
-                Profile profile = profileRepo.findById(id).orElseThrow(()-> new RuntimeException("no profile found"));
-                List<Booking> bookings = bookingRepo.findByProfileAndStatus(profile,status);
-                List<BookingDto> bookingDtos = bookings.stream().map(booking -> {
-
-                    BookingDto bookingDto = new BookingDto();
-                    bookingDto.setId(booking.getId());
-                    bookingDto.setBookedDate(booking.getBookedDate());
-                    bookingDto.setBookingDate(booking.getBookingDate());
-                    bookingDto.setBookingTime(booking.getBookingTime());
-                    bookingDto.setDescription(booking.getDescription());
-                    bookingDto.setUrgency(booking.getUrgency());
-                    bookingDto.setLocation(booking.getLocation());
-                    bookingDto.setPhoneNumber(booking.getPhoneNumber());
-                    bookingDto.setStatus(booking.getStatus());
-
-                    return bookingDto;
-                }).toList();
-
-                return ResponseEntity.ok(bookingDtos);
-
-            } catch (RuntimeException e) {
-                throw new RuntimeException("cant get bookings : " + e.getMessage());
-            }
-
-        }else {
-            throw  new RuntimeException("You must login to update profile status!");
-        }
-    }
 
     public Response updateBookingStatus(String token, int id,String status) {
         if (!tokenBlackList.isTokenBlacklisted(token)) {
@@ -187,5 +115,40 @@ public class BookingService {
         }else {
             return new Response("You must login first!", false);
         }
+    }
+
+    public ResponseEntity<List<BookingDto>> getBookingsOfEachCustomer(String token, int id) {
+        if (!tokenBlackList.isTokenBlacklisted(token)) {
+
+            try{
+
+                User customer = userRepo.findById(id).orElseThrow(()-> new RuntimeException("no profile found"));
+                List<Booking> bookings = bookingRepo.findByCustomer(customer);
+                List<BookingDto> bookingDtos = bookings.stream().map(booking -> {
+
+                    BookingDto bookingDto = new BookingDto();
+                    bookingDto.setId(booking.getId());
+                    bookingDto.setBookedDate(booking.getBookedDate());
+                    bookingDto.setBookingDate(booking.getBookingDate());
+                    bookingDto.setBookingTime(booking.getBookingTime());
+                    bookingDto.setDescription(booking.getDescription());
+                    bookingDto.setUrgency(booking.getUrgency());
+                    bookingDto.setLocation(booking.getLocation());
+                    bookingDto.setPhoneNumber(booking.getPhoneNumber());
+                    bookingDto.setStatus(booking.getStatus());
+
+                    return bookingDto;
+                }).toList();
+
+                return ResponseEntity.ok(bookingDtos);
+
+            } catch (RuntimeException e) {
+                throw new RuntimeException("cant get bookings : " + e.getMessage());
+            }
+
+        }else {
+            throw  new RuntimeException("You must login to update profile status!");
+        }
+
     }
 }

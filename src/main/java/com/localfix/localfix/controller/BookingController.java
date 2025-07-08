@@ -23,25 +23,25 @@ public class BookingController {
         return ResponseEntity.ok(response);
     }
 
+    //get pending/approved/cancelled/declined bookings of each worker
     @GetMapping("/getBookingsOfEachWorker/{id}")
-    public ResponseEntity<List<BookingDto>> getBookingsOfEachWorker(@RequestHeader("Authorization") String token,@PathVariable int id){
-        return bookingService.getBookingsOfEachWorker(token,id);
+    public ResponseEntity<List<BookingDto>> getBookingsOfEachWorker(@RequestHeader("Authorization") String token,@PathVariable int id,@RequestParam String status){
+        return bookingService.getBookingsOfEachWorker(token,id,status);
     }
 
-    @GetMapping("/getApprovedBookingsOfEachWorker/{id}")
-    public ResponseEntity<List<BookingDto>> getApprovedBookingsOfEachWorker(@RequestHeader("Authorization") String token,@PathVariable int id){
-        return bookingService.getApprovedBookingsOfEachWorker(token,id);
-    }
 
-    @GetMapping("/getDeclinedBookingsOfEachWorker/{id}")
-    public ResponseEntity<List<BookingDto>> getDeclinedBookingsOfEachWorker(@RequestHeader("Authorization") String token,@PathVariable int id){
-        return bookingService.getDeclinedBookingsOfEachWorker(token,id);
-    }
-
-    //approved/decline or completed
+    //approved/decline/cancelled or completed , work for both customer and worker
     @PutMapping("/updateBookingStatus/{id}")
     public ResponseEntity<Response> updateBookingStatus(@RequestHeader("Authorization") String token,@PathVariable int id,@RequestParam String status){
         Response response = bookingService.updateBookingStatus(token,id,status);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/getBookingsOfEachCustomer/{id}")
+    public ResponseEntity<List<BookingDto>> getBookingsOfEachCustomer(@RequestHeader("Authorization") String token,@PathVariable int id){
+        return bookingService.getBookingsOfEachCustomer(token,id);
+    }
+
+    @PutMapping("/editBooking")
+    public Res
 }

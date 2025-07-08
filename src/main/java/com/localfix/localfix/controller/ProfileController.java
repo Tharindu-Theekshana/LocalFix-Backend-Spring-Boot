@@ -41,20 +41,12 @@ public class ProfileController {
         return profileService.getProfileById(id);
     }
 
-    @GetMapping("/getPendingProfiles")
-    public ResponseEntity<List<ProfileDto>> getPendingProfiles(@RequestHeader("Authorization") String token){
-        return profileService.getPendingProfiles(token);
+    //get profiles of pending / approved or declined
+    @GetMapping("/getProfilesByStatus")
+    public ResponseEntity<List<ProfileDto>> getProfilesByStatus(@RequestHeader("Authorization") String token,@RequestParam String status){
+        return profileService.getProfilesByStatus(token,status);
     }
 
-    @GetMapping("/getApprovedProfiles")
-    public ResponseEntity<List<ProfileDto>> getApprovedProfiles(@RequestHeader("Authorization") String token){
-        return profileService.getApprovedProfiles(token);
-    }
-
-    @GetMapping("/getDeclinedProfiles")
-    public ResponseEntity<List<ProfileDto>> getDeclinedProfiles(@RequestHeader("Authorization") String token){
-        return profileService.getDeclinedProfiles(token);
-    }
 
     @GetMapping("/getProfilesByCategory/{category}")
     public ResponseEntity<List<ProfileDto>> getProfilesByCategory(@PathVariable String category){
