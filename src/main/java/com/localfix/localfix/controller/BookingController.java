@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/booking")
 public class BookingController {
@@ -19,5 +21,10 @@ public class BookingController {
 
         Response response = bookingService.makeBooking(token,bookingDto);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/getBookingsOfEachWorker/{id}")
+    public ResponseEntity<List<BookingDto>> getBookingsOfEachWorker(@RequestHeader("Authorization") String token,@PathVariable int id){
+        return bookingService.getBookingsOfEachWorker(token,id);
     }
 }
