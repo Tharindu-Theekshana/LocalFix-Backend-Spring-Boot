@@ -340,22 +340,4 @@ public class ProfileService {
             throw new RuntimeException("cant get profiles by category : " + e.getMessage());
         }
     }
-
-    public ProfileResponse updateProfile(String token, ProfileDto profileDto, int id) {
-        if (!tokenBlackList.isTokenBlacklisted(token)) {
-
-            try{
-
-                Profile profile = profileRepo.findById(id).orElseThrow(()-> new RuntimeException("no profile found!"));
-
-                
-
-            }catch (Exception e){
-                return new ProfileResponse("cant update profile! : " + e.getMessage(), false);
-            }
-
-        }else {
-            return new ProfileResponse("You must login to update profile status!", false);
-        }
-    }
 }

@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ProfileRepo extends JpaRepository<Profile, Integer> {
     List<Profile> findByStatus(String status);
+
+    List<Profile> findByStatusAndServiceCategory(String status, String category);
 }

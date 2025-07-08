@@ -56,6 +56,17 @@ public class ProfileController {
         return profileService.getDeclinedProfiles(token);
     }
 
+    @GetMapping("/getProfilesByCategory/{category}")
+    public ResponseEntity<List<ProfileDto>> getProfilesByCategory(@PathVariable String category){
+        return profileService.getProfilesByCategory(category);
+    }
+
+    @PutMapping("/updateProfile/{id}")
+    public ResponseEntity<ProfileResponse> updateProfile(@RequestHeader("Authorization") String token, @RequestBody ProfileDto profileDto, @PathVariable int id){
+        ProfileResponse response = profileService.updateProfile(token,profileDto,id);
+        return ResponseEntity.ok(response);
+    }
+
 
 
 
