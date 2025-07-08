@@ -27,4 +27,21 @@ public class BookingController {
     public ResponseEntity<List<BookingDto>> getBookingsOfEachWorker(@RequestHeader("Authorization") String token,@PathVariable int id){
         return bookingService.getBookingsOfEachWorker(token,id);
     }
+
+    @GetMapping("/getApprovedBookingsOfEachWorker/{id}")
+    public ResponseEntity<List<BookingDto>> getApprovedBookingsOfEachWorker(@RequestHeader("Authorization") String token,@PathVariable int id){
+        return bookingService.getApprovedBookingsOfEachWorker(token,id);
+    }
+
+    @GetMapping("/getDeclinedBookingsOfEachWorker/{id}")
+    public ResponseEntity<List<BookingDto>> getDeclinedBookingsOfEachWorker(@RequestHeader("Authorization") String token,@PathVariable int id){
+        return bookingService.getDeclinedBookingsOfEachWorker(token,id);
+    }
+
+    //approved/decline or completed
+    @PutMapping("/updateBookingStatus/{id}")
+    public ResponseEntity<Response> updateBookingStatus(@RequestHeader("Authorization") String token,@PathVariable int id,@RequestParam String status){
+        Response response = bookingService.updateBookingStatus(token,id,status);
+        return ResponseEntity.ok(response);
+    }
 }

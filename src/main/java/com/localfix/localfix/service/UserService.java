@@ -33,6 +33,7 @@ public class UserService {
                 List<UserDto> userDtos = users.stream().map(user -> {
 
                     UserDto userDto = new UserDto();
+                    userDto.setId(user.getId());
                     userDto.setEmail(user.getEmail());
                     userDto.setRole(user.getRole());
 
@@ -61,6 +62,7 @@ public class UserService {
                 List<UserDto> userDtos = users.stream().map(user -> {
 
                     UserDto userDto = new UserDto();
+                    userDto.setId(user.getId());
                     userDto.setEmail(user.getEmail());
                     userDto.setRole(user.getRole());
 
