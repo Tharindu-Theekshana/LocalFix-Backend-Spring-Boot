@@ -1,13 +1,13 @@
 package com.localfix.localfix.controller;
 
+import com.localfix.localfix.dto.ProfileDto;
+import com.localfix.localfix.dto.ProfileResponse;
+import com.localfix.localfix.dto.Response;
 import com.localfix.localfix.dto.UserDto;
 import com.localfix.localfix.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,5 +26,12 @@ public class UserController {
     @GetMapping("/getAllWorkers")
     public ResponseEntity<List<UserDto>> getAllWorkers(@RequestHeader("Authorization") String token){
         return userService.getAllWorkers(token);
+    }
+
+    @DeleteMapping("/deleteUser/{id}")
+    public ResponseEntity<Response> deleteUser(@RequestHeader("Authorization") String token, @PathVariable int id){
+
+        Response response = userService.deleteUser(token,id);
+        return ResponseEntity.ok(response);
     }
 }

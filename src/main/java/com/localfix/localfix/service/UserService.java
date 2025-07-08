@@ -1,5 +1,7 @@
 package com.localfix.localfix.service;
 
+import com.localfix.localfix.dto.ProfileResponse;
+import com.localfix.localfix.dto.Response;
 import com.localfix.localfix.dto.UserDto;
 import com.localfix.localfix.model.User;
 import com.localfix.localfix.repository.UserRepo;
@@ -75,5 +77,24 @@ public class UserService {
             throw  new RuntimeException("You must login first!");
         }
 
+    }
+
+
+    public Response deleteUser(String token, int id) {
+
+        if (!tokenBlackList.isTokenBlacklisted(token)) {
+
+            try{
+                User user = userRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found!"));
+                userRepo.delete(user);
+                return new Response("User deleted successfully", true);
+
+            }catch (Exception e){
+                return new Response("cant delete user : " + e.getMessage(), false);
+            }
+
+        }else {
+           return new Response("You must login to update profile status!", false);
+        }
     }
 }
