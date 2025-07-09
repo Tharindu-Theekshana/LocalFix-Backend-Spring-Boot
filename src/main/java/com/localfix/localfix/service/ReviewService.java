@@ -10,7 +10,10 @@ import com.localfix.localfix.repository.ReviewRepo;
 import com.localfix.localfix.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +53,31 @@ public class ReviewService {
 
         }else {
             return new Response("You must login first!", false);
+        }
+    }
+
+    public ResponseEntity<List<ReviewDto>> displayReview(int id) {
+
+        try{
+
+            List<Review> reviews = reviewRepo.findByProfileId(id);
+            List<ReviewDto> reviewDtos = reviews.stream().map(review -> {
+
+                ReviewDto reviewDto = new ReviewDto();
+                reviewDto.setId(review.getId());
+                reviewDto.setComment(review.getComment());
+                reviewDto.setRating(review.getRating());
+                reviewDto.setCustomerId(review.getCustomer().getId());
+                reviewDto.setProfileId(review.getProfile().getId());
+                reviewDto.setCustomerEmail(review.getCustomer().getEmail());
+
+                return reviewDto;
+            }).toList();
+
+            return ResponseEntity.ok(reviewDtos);
+
+        } catch (RuntimeException e) {
+            throw new RuntimeException("cant display reviews : " + e.getMessage());
         }
     }
 }

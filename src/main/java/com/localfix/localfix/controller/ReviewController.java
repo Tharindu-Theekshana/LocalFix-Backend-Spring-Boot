@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/review")
 public class ReviewController {
@@ -21,5 +23,10 @@ public class ReviewController {
 
         Response response = reviewService.submitReview(token,reviewDto);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/displayReviewsOfEachProfile/{id}")
+    public ResponseEntity<List<ReviewDto>> displayReview(@PathVariable int id){
+        return reviewService.displayReview(id);
     }
 }

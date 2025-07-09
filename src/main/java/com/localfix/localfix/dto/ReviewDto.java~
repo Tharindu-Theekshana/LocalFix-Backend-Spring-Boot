@@ -22,5 +22,4 @@ public class ReviewDto {
     private String comment;
     private int customerId;
     private int profileId;
-    private String customerEmail;
 }
