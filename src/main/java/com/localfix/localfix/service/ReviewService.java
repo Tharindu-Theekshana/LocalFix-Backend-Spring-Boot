@@ -113,4 +113,25 @@ public class ReviewService {
             throw  new RuntimeException("You must login first!");
         }
     }
+
+    public Response editReview(String token, ReviewDto reviewDto, int id) {
+        if (!tokenBlackList.isTokenBlacklisted(token)) {
+
+            try{
+
+                Review review = reviewRepo.findById(id).orElseThrow(()-> new RuntimeException("No review found!"));
+                review.setComment(reviewDto.getComment());
+                review.setRating(reviewDto.getRating());
+                reviewRepo.save(review);
+
+                return new Response("Review edited successfully!",true);
+
+            }catch (Exception e) {
+                return new Response("Cant edit review : " + e.getMessage(), false);
+            }
+
+        }else {
+           return new Response("You must login first!", false);
+        }
+    }
 }

@@ -34,4 +34,11 @@ public class ReviewController {
     public ResponseEntity<List<ReviewDto>> displayReviewsOfCustomer(@RequestHeader("Authorization") String token,@PathVariable int id){
         return reviewService.displayReviewsOfCustomer(token,id);
     }
+
+    @PutMapping("/editReview/{id}")
+    public ResponseEntity<Response> editReview(@RequestHeader("Authorization") String token,@RequestBody ReviewDto reviewDto,@PathVariable int id){
+
+        Response response = reviewService.editReview(token,reviewDto,id);
+        return ResponseEntity.ok(response);
+    }
 }
