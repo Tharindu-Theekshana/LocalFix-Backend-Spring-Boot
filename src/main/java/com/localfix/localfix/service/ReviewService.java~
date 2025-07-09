@@ -1,0 +1,35 @@
+package com.localfix.localfix.service;
+
+import com.localfix.localfix.dto.Response;
+import com.localfix.localfix.dto.ReviewDto;
+import com.localfix.localfix.repository.ReviewRepo;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class ReviewService {
+
+    @Autowired
+    TokenBlackList tokenBlackList;
+
+    @Autowired
+    ReviewRepo reviewRepo;
+
+    public Response submitReview(String token, ReviewDto reviewDto) {
+
+        if (!tokenBlackList.isTokenBlacklisted(token)) {
+
+            try{
+                
+
+            }catch (Exception e){
+                return new Response("cant submit review!", false);
+            }
+
+        }else {
+            return new Response("You must login first!", false);
+        }
+    }
+}
