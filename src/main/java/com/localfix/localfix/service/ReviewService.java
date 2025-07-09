@@ -80,4 +80,37 @@ public class ReviewService {
             throw new RuntimeException("cant display reviews : " + e.getMessage());
         }
     }
+
+    public ResponseEntity<List<ReviewDto>> displayReviewsOfCustomer(String token, int id) {
+
+        if (!tokenBlackList.isTokenBlacklisted(token)) {
+
+            try{
+
+                List<Review> reviews = reviewRepo.findByCustomerId(id);
+                List<ReviewDto> reviewDtos = reviews.stream().map(review -> {
+
+                    ReviewDto reviewDto = new ReviewDto();
+                    reviewDto.setId(review.getId());
+                    reviewDto.setComment(review.getComment());
+                    reviewDto.setRating(review.getRating());
+                    reviewDto.setCustomerId(review.getCustomer().getId());
+                    reviewDto.setProfileId(review.getProfile().getId());
+                    reviewDto.setCustomerEmail(review.getCustomer().getEmail());
+                    reviewDto.setServiceCategory(review.getProfile().getServiceCategory());
+                    reviewDto.setProfileName(review.getProfile().getName());
+
+                    return reviewDto;
+                }).toList();
+
+                return ResponseEntity.ok(reviewDtos);
+
+            } catch (RuntimeException e) {
+                throw new RuntimeException("cant get reviews of customer : "+ e.getMessage());
+            }
+
+        }else {
+            throw  new RuntimeException("You must login first!");
+        }
+    }
 }

@@ -23,4 +23,6 @@ public class ReviewDto {
     private int customerId;
     private int profileId;
     private String customerEmail;
+    private String profileName;
+    private String serviceCategory;
 }

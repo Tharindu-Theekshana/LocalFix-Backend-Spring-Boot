@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ReviewRepo extends JpaRepository <Review, Integer> {
     List<Review> findByProfileId(int id);
+
+    List<Review> findByCustomerId(int id);
 }
