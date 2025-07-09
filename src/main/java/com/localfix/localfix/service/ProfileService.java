@@ -164,6 +164,9 @@ public class ProfileService {
             profileDto.setStatus(profile.getStatus());
             profileDto.setWorkerId(profile.getWorker().getId());
 
+            int completedJobsCount = bookingRepo.countCompletedJobsByProfile(profile.getId());
+            profileDto.setCompletedJobsCount(completedJobsCount);
+
             if(profile.getImage() != null){
                 String profileImage = Base64.getEncoder().encodeToString(profile.getImage());
                 profileDto.setProfileImage(profileImage);
@@ -304,7 +307,7 @@ public class ProfileService {
             }
 
         }else {
-            return new ProfileResponse("You must login to update profile status!", false);
+            return new ProfileResponse("You must login to update profile!", false);
         }
     }
 
@@ -347,6 +350,50 @@ public class ProfileService {
 
         } catch (RuntimeException e) {
             throw new RuntimeException("can search profile : " + e.getMessage());
+        }
+    }
+
+    public ResponseEntity<ProfileDto> getProfileByWorkerId(String token, int id) {
+        if (!tokenBlackList.isTokenBlacklisted(token)) {
+
+            try {
+                Profile profile = profileRepo.findByWorkerId(id);
+
+                ProfileDto profileDto = new ProfileDto();
+                profileDto.setId(profile.getId());
+                profileDto.setName(profile.getName());
+                profileDto.setBio(profile.getBio());
+                profileDto.setLocation(profile.getLocation());
+                profileDto.setExperience(profile.getExperience());
+                profileDto.setDescription(profile.getDescription());
+                profileDto.setPrice(profile.getPrice());
+                profileDto.setServiceCategory(profile.getServiceCategory());
+                profileDto.setPhoneNumber(profile.getPhoneNumber());
+                profileDto.setStatus(profile.getStatus());
+                profileDto.setWorkerId(profile.getWorker().getId());
+
+                int completedJobsCount = bookingRepo.countCompletedJobsByProfile(profile.getId());
+                profileDto.setCompletedJobsCount(completedJobsCount);
+
+                if(profile.getImage() != null){
+                    String profileImage = Base64.getEncoder().encodeToString(profile.getImage());
+                    profileDto.setProfileImage(profileImage);
+                }
+
+                List<Image> images = imageRepo.findByProfileId(profile.getId());
+                List<String> imageBase64List = images.stream().map(img -> "data:" + img.getContentype() + ";base64," + Base64.getEncoder().encodeToString(img.getData())).toList();
+                profileDto.setImages(imageBase64List);
+
+                return ResponseEntity.ok(profileDto);
+
+
+
+            } catch (RuntimeException e) {
+                throw new RuntimeException("cant get profile by worker id : " + e.getMessage());
+            }
+
+        }else {
+            throw new RuntimeException("You must login to update profile!");
         }
     }
 }

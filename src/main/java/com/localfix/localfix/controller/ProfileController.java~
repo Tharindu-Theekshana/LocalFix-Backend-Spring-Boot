@@ -64,10 +64,7 @@ public class ProfileController {
         return profileService.searchProfile(category,location);
     }
 
-    @GetMapping("/getProfileByWorkerId/{id}")
-    public ResponseEntity<ProfileDto> getProfileByWorkerId(@RequestHeader("Authorization") String token,@PathVariable int id){
-        return profileService.getProfileByWorkerId(token,id);
-    }
+
 
 
 
