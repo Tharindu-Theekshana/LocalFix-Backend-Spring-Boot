@@ -203,7 +203,7 @@ public class ProfileService {
 
                     int completedJobsCount = bookingRepo.countCompletedJobsByProfile(profile.getId());
                     profileDto.setCompletedJobsCount(completedJobsCount);
-
+                    
                     if(profile.getImage() != null){
                         String profileImage = Base64.getEncoder().encodeToString(profile.getImage());
                         profileDto.setProfileImage(profileImage);

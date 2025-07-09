@@ -43,8 +43,8 @@ public class ProfileController {
 
     //get profiles of pending / approved or declined
     @GetMapping("/getProfilesByStatus")
-    public ResponseEntity<List<ProfileDto>> getProfilesByStatus(@RequestHeader("Authorization") String token,@RequestParam String status){
-        return profileService.getProfilesByStatus(token,status);
+    public ResponseEntity<List<ProfileDto>> getProfilesByStatus(@RequestParam String status){
+        return profileService.getProfilesByStatus(status);
     }
 
 

@@ -43,5 +43,10 @@ public class BookingController {
     }
 
     @PutMapping("/editBooking")
-    public Res
+    public ResponseEntity<Response> editBooking(@RequestHeader("Authorization") String token,@RequestBody BookingDto bookingDto){
+
+        Response response = bookingService.editBooking(token,bookingDto);
+        return ResponseEntity.ok(response);
+    }
+
 }

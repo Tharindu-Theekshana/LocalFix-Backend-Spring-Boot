@@ -26,4 +26,5 @@ public class ProfileDto {
     private String profileImage;
     private List<String> images;
     private String status;
+    private int completedJobsCount;
 }

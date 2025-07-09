@@ -102,9 +102,9 @@ public class BookingService {
         if (!tokenBlackList.isTokenBlacklisted(token)) {
 
             try{
-                Booking booking = bookingRepo.findById(id).orElseThrow(()-> new RuntimeException("no booking found!"));
-                booking.setStatus(status);
-                bookingRepo.save(booking);
+                Profile profile = profileRepo.findById(id).orElseThrow(()-> new RuntimeException("no profile found!"));
+                profile.setStatus(status);
+                profileRepo.save(profile);
 
                 return new Response("Status updated successfully!",true);
 
