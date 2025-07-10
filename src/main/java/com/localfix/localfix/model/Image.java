@@ -23,7 +23,7 @@ public class Image {
     @Column(name = "content_type")
     private String contentype;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "profile_id", nullable = false)
     private Profile profile;
 

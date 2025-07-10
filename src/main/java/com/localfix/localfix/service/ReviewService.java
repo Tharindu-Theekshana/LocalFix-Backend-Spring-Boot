@@ -134,4 +134,32 @@ public class ReviewService {
            return new Response("You must login first!", false);
         }
     }
+
+    public Response deleteReview(String token, int id) {
+        if (!tokenBlackList.isTokenBlacklisted(token)) {
+
+            try {
+                Review review = reviewRepo.findById(id).orElseThrow(()-> new RuntimeException("No review found!"));
+
+                Profile profile = review.getProfile();
+                if (profile != null) {
+                    profile.getReviews().remove(review);
+                }
+
+                User customer = review.getCustomer();
+                if (customer != null) {
+                    customer.getReviews().remove(review);
+                }
+                reviewRepo.delete(review);
+
+                return new Response("Review deleted successfully!",true);
+
+            }catch (Exception e) {
+                return new Response("Cant delete review : " + e.getMessage(), false);
+            }
+
+        }else {
+            return new Response("You must login first!", false);
+        }
+    }
 }

@@ -103,39 +103,18 @@ public class UserService {
     }
 
     @Transactional
-    public Response deleteUser(String token,int id) {
+    public Response deleteUser( int id) {
 
-        if (!tokenBlackList.isTokenBlacklisted(token)) {
-
-            try {
-                if (!userRepo.existsById(id)) {
-                    return new Response("User not found!", false);
-                }
-
-                entityManager.createNativeQuery("DELETE FROM bookings WHERE customer_id = ?1")
-                        .setParameter(1, id)
-                        .executeUpdate();
-
-                entityManager.createNativeQuery("DELETE FROM reviews WHERE customer_id = ?1")
-                        .setParameter(1, id)
-                        .executeUpdate();
-
-                entityManager.createNativeQuery("DELETE FROM profiles WHERE worker_id = ?1")
-                        .setParameter(1, id)
-                        .executeUpdate();
-
-                entityManager.createNativeQuery("DELETE FROM users WHERE id = ?1")
-                        .setParameter(1, id)
-                        .executeUpdate();
+            try{
+               User user = userRepo.findById(id).orElseThrow(()-> new RuntimeException("no user found"));
+               userRepo.delete(user);
 
                 return new Response("User deleted successfully", true);
 
-            } catch (Exception e) {
+            }catch (Exception e){
                 return new Response("cant delete user : " + e.getMessage(), false);
             }
-        }else {
-                return new Response("You must login first!",false);
-            }
+
 
     }
 }

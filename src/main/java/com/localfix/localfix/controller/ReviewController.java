@@ -41,4 +41,11 @@ public class ReviewController {
         Response response = reviewService.editReview(token,reviewDto,id);
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("/deleteReview/{id}")
+    public ResponseEntity<Response> deleteReview(@RequestHeader("Authorization") String token,@PathVariable int id){
+
+        Response response = reviewService.deleteReview(token,id);
+        return ResponseEntity.ok(response);
+    }
 }

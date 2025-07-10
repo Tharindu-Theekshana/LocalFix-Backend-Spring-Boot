@@ -60,7 +60,7 @@ public class Profile {
     @Column(nullable = false, columnDefinition = "LONGBLOB")
     private byte[] image;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "worker_id", nullable = false)
     private User worker;
 
