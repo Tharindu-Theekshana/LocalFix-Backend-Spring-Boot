@@ -5,10 +5,7 @@ import com.localfix.localfix.dto.ProfileResponse;
 import com.localfix.localfix.model.Image;
 import com.localfix.localfix.model.Profile;
 import com.localfix.localfix.model.User;
-import com.localfix.localfix.repository.BookingRepo;
-import com.localfix.localfix.repository.ImageRepo;
-import com.localfix.localfix.repository.ProfileRepo;
-import com.localfix.localfix.repository.UserRepo;
+import com.localfix.localfix.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +34,9 @@ public class ProfileService {
 
     @Autowired
     BookingRepo bookingRepo;
+
+    @Autowired
+    ReviewRepo reviewRepo;
 
     public ProfileResponse createProfile(String token,MultipartFile profileImage,ProfileDto profileDto, List<MultipartFile> images) {
 
@@ -126,6 +126,13 @@ public class ProfileService {
                     profileDto.setStatus(profile.getStatus());
                     profileDto.setWorkerId(profile.getWorker().getId());
 
+                    int completedJobsCount = bookingRepo.countCompletedJobsByProfile(profile.getId());
+                    profileDto.setCompletedJobsCount(completedJobsCount);
+
+                    Double avgRating = reviewRepo.findAverageRatingByProfileId(profile.getId());
+                    profileDto.setAverageRating(avgRating != null ? avgRating : 0.0);
+
+
                     if(profile.getImage() != null){
                         String profileImage = Base64.getEncoder().encodeToString(profile.getImage());
                         profileDto.setProfileImage(profileImage);
@@ -167,6 +174,9 @@ public class ProfileService {
             int completedJobsCount = bookingRepo.countCompletedJobsByProfile(profile.getId());
             profileDto.setCompletedJobsCount(completedJobsCount);
 
+            Double avgRating = reviewRepo.findAverageRatingByProfileId(profile.getId());
+            profileDto.setAverageRating(avgRating != null ? avgRating : 0.0);
+
             if(profile.getImage() != null){
                 String profileImage = Base64.getEncoder().encodeToString(profile.getImage());
                 profileDto.setProfileImage(profileImage);
@@ -207,6 +217,9 @@ public class ProfileService {
                     int completedJobsCount = bookingRepo.countCompletedJobsByProfile(profile.getId());
                     profileDto.setCompletedJobsCount(completedJobsCount);
 
+                    Double avgRating = reviewRepo.findAverageRatingByProfileId(profile.getId());
+                    profileDto.setAverageRating(avgRating != null ? avgRating : 0.0);
+
                     if(profile.getImage() != null){
                         String profileImage = Base64.getEncoder().encodeToString(profile.getImage());
                         profileDto.setProfileImage(profileImage);
@@ -246,6 +259,12 @@ public class ProfileService {
                 profileDto.setServiceCategory(profile.getServiceCategory());
                 profileDto.setPhoneNumber(profile.getPhoneNumber());
                 profileDto.setWorkerId(profile.getWorker().getId());
+
+                int completedJobsCount = bookingRepo.countCompletedJobsByProfile(profile.getId());
+                profileDto.setCompletedJobsCount(completedJobsCount);
+
+                Double avgRating = reviewRepo.findAverageRatingByProfileId(profile.getId());
+                profileDto.setAverageRating(avgRating != null ? avgRating : 0.0);
 
                 if(profile.getImage() != null){
                     String profileImage = Base64.getEncoder().encodeToString(profile.getImage());
@@ -338,6 +357,12 @@ public class ProfileService {
                 profileDto.setPhoneNumber(profile.getPhoneNumber());
                 profileDto.setWorkerId(profile.getWorker().getId());
 
+                int completedJobsCount = bookingRepo.countCompletedJobsByProfile(profile.getId());
+                profileDto.setCompletedJobsCount(completedJobsCount);
+
+                Double avgRating = reviewRepo.findAverageRatingByProfileId(profile.getId());
+                profileDto.setAverageRating(avgRating != null ? avgRating : 0.0);
+
                 if(profile.getImage() != null){
                     String profileImage = Base64.getEncoder().encodeToString(profile.getImage());
                     profileDto.setProfileImage(profileImage);
@@ -374,6 +399,9 @@ public class ProfileService {
 
                 int completedJobsCount = bookingRepo.countCompletedJobsByProfile(profile.getId());
                 profileDto.setCompletedJobsCount(completedJobsCount);
+
+                Double avgRating = reviewRepo.findAverageRatingByProfileId(profile.getId());
+                profileDto.setAverageRating(avgRating != null ? avgRating : 0.0);
 
                 if(profile.getImage() != null){
                     String profileImage = Base64.getEncoder().encodeToString(profile.getImage());
