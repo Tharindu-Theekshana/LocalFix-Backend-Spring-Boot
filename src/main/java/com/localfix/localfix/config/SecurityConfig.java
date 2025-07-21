@@ -28,6 +28,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**","/api/profile/getById/{id}","/api/profile/getProfilesByCategory/{category}","/api/profile/searchProfile","/api/profile/getProfilesByStatus","/api/review/displayReviewsOfEachProfile/{id}").permitAll()
                         .anyRequest().authenticated())

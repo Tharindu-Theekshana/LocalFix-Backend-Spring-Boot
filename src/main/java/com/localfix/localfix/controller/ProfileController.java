@@ -18,7 +18,7 @@ public class ProfileController {
     ProfileService profileService;
 
     @PostMapping("/createProfile")
-    public ResponseEntity<ProfileResponse> createProfile(@RequestHeader("Authorization") String token,@RequestPart("profileImage")MultipartFile profileImage, @RequestPart("profile") ProfileDto profileDto, @RequestPart("images")List<MultipartFile> images){
+    public ResponseEntity<ProfileResponse> createProfile(@RequestHeader("Authorization") String token,@RequestPart("profileImage")MultipartFile profileImage, @RequestPart("profile") ProfileDto profileDto, @RequestPart(value = "images", required = false)List<MultipartFile> images){
 
         ProfileResponse response = profileService.createProfile(token,profileImage,profileDto, images);
         return ResponseEntity.ok(response);
@@ -43,8 +43,8 @@ public class ProfileController {
 
     //get profiles of pending / approved or declined
     @GetMapping("/getProfilesByStatus")
-    public ResponseEntity<List<ProfileDto>> getProfilesByStatus(@RequestParam String status){
-        return profileService.getProfilesByStatus(status);
+    public ResponseEntity<List<ProfileDto>> getProfilesByStatus(@RequestHeader("Authorization") String token, @RequestParam String status){
+        return profileService.getProfilesByStatus(token, status);
     }
 
 
@@ -54,7 +54,7 @@ public class ProfileController {
     }
 
     @PutMapping("/updateProfile/{id}")
-    public ResponseEntity<ProfileResponse> updateProfile(@RequestHeader("Authorization") String token, @RequestPart("profile") ProfileDto profileDto, @PathVariable int id,@RequestPart("profileImage")MultipartFile profileImage,@RequestPart("images")List<MultipartFile> images){
+    public ResponseEntity<ProfileResponse> updateProfile(@RequestHeader("Authorization") String token, @RequestPart("profile") ProfileDto profileDto, @PathVariable int id,@RequestPart("profileImage")MultipartFile profileImage,@RequestPart(value = "images", required = false)List<MultipartFile> images){
         ProfileResponse response = profileService.updateProfile(token,profileDto,id,images,profileImage);
         return ResponseEntity.ok(response);
     }

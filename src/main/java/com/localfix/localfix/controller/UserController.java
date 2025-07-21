@@ -28,6 +28,7 @@ public class UserController {
         return userService.getAllWorkers(token);
     }
 
+
     @DeleteMapping("/deleteUser/{id}")
     public ResponseEntity<Response> deleteUser(@RequestHeader("Authorization") String token, @PathVariable int id){
 

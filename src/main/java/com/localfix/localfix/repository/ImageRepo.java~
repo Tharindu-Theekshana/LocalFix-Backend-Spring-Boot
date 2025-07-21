@@ -12,6 +12,7 @@ import java.util.List;
 public interface ImageRepo extends JpaRepository<Image, Integer> {
 
 
+
     @Query("SELECT i FROM Image i WHERE i.profile.id = :profileId")
     List<Image> findByProfileId(@Param("profileId") int profileId);
 
@@ -23,6 +24,5 @@ public interface ImageRepo extends JpaRepository<Image, Integer> {
     @Modifying
     @Transactional
     @Query("DELETE FROM Image i WHERE i.profile.id = :profileId AND i.id NOT IN :idsToKeep")
-    void deleteByProfileIdExcept(@Param("profileId") int profileId, @Param("idsToKeep") List<Integer> idsToKeep); // Changed from Long to Integer
+    void deleteByProfileIdExcept(@Param("profileId") int profileId, @Param("idsToKeep") List<Long> idsToKeep);
 }
-

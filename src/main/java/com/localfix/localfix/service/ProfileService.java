@@ -12,9 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +38,11 @@ public class ProfileService {
 
     public ProfileResponse createProfile(String token,MultipartFile profileImage,ProfileDto profileDto, List<MultipartFile> images) {
 
+        System.out.println("TOKEN RECEIVED: " + token);
+        System.out.println("Is token blacklisted? " + tokenBlackList.isTokenBlacklisted(token));
+
         if (!tokenBlackList.isTokenBlacklisted(token)) {
+
             try {
                 User worker = userRepo.findById(profileDto.getWorkerId()).orElseThrow(() -> new RuntimeException("Worker not found!"));
 
@@ -81,6 +83,7 @@ public class ProfileService {
             }
         } else {
             return new ProfileResponse("You must login to create profile!", false);
+
         }
 
     }
@@ -193,9 +196,9 @@ public class ProfileService {
         }
     }
 
-    public ResponseEntity<List<ProfileDto>> getProfilesByStatus(String status) {
+    public ResponseEntity<List<ProfileDto>> getProfilesByStatus(String token, String status) {
 
-
+        if (!tokenBlackList.isTokenBlacklisted(token)) {
             try{
 
                 List<Profile> profiles = profileRepo.findByStatus(status);
@@ -234,7 +237,9 @@ public class ProfileService {
             } catch (RuntimeException e) {
                 throw new RuntimeException("cant get pending events : " + e.getMessage());
             }
-
+        }else {
+            throw  new RuntimeException("You must login to update profile status!");
+        }
 
     }
 
@@ -279,15 +284,15 @@ public class ProfileService {
         } catch (RuntimeException e) {
             throw new RuntimeException("cant get profiles by category : " + e.getMessage());
         }
+
     }
 
-    public ProfileResponse updateProfile(String token, ProfileDto profileDto, int id,List<MultipartFile> images,MultipartFile profileImage) {
+    public ProfileResponse updateProfile(String token, ProfileDto profileDto, int id, List<MultipartFile> images, MultipartFile profileImage) {
         if (!tokenBlackList.isTokenBlacklisted(token)) {
+            try {
+                Profile profile = profileRepo.findById(id).orElseThrow(() -> new RuntimeException("no profile found!"));
 
-            try{
-
-                Profile profile = profileRepo.findById(id).orElseThrow(()-> new RuntimeException("no profile found!"));
-
+                // Update profile fields
                 profile.setName(profileDto.getName());
                 profile.setBio(profileDto.getBio());
                 profile.setLocation(profileDto.getLocation());
@@ -297,39 +302,35 @@ public class ProfileService {
                 profile.setServiceCategory(profileDto.getServiceCategory());
                 profile.setPhoneNumber(profileDto.getPhoneNumber());
 
-                if(profileImage != null && !profileImage.isEmpty()){
+                if (profileImage != null && !profileImage.isEmpty()) {
                     profile.setImage(profileImage.getBytes());
                 }
 
                 Profile savedProfile = profileRepo.save(profile);
 
-                List<Image> imageList = new ArrayList<>();
                 if (images != null && !images.isEmpty()) {
+                    List<Image> newImageList = new ArrayList<>();
                     for (MultipartFile file : images) {
                         if (!file.isEmpty()) {
                             Image img = new Image();
                             img.setData(file.getBytes());
                             img.setContentype(file.getContentType());
                             img.setProfile(savedProfile);
-                            imageList.add(img);
+                            newImageList.add(img);
                         }
-
                     }
-                    imageRepo.saveAll(imageList);
+                    imageRepo.saveAll(newImageList);
                 }
 
-                return new ProfileResponse("Profile updated successfully!",true);
-
-
-            }catch (Exception e){
+                return new ProfileResponse("Profile updated successfully!", true);
+            } catch (Exception e) {
+                e.printStackTrace();
                 return new ProfileResponse("cant update profile! : " + e.getMessage(), false);
             }
-
-        }else {
+        } else {
             return new ProfileResponse("You must login to update profile!", false);
         }
     }
-
     public ResponseEntity<List<ProfileDto>> searchProfile(String category, String location) {
         try{
             String status = "approved";

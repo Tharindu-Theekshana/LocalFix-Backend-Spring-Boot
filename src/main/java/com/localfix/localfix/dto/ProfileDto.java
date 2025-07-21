@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Data
@@ -28,4 +29,5 @@ public class ProfileDto {
     private String status;
     private int completedJobsCount;
     private double averageRating;
+    private List<Integer> existingImages;
 }

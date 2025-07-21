@@ -29,6 +29,11 @@ public class BookingController {
         return bookingService.getBookingsOfEachWorker(token,id,status);
     }
 
+    @GetMapping("/getAllBookingsOfEachWorker/{id}")
+    public ResponseEntity<List<BookingDto>> getAllBookingsOfEachWorker(@RequestHeader("Authorization") String token,@PathVariable int id){
+        return bookingService.getAllBookingsOfEachWorker(token,id);
+    }
+
 
     //approved/decline/cancelled or completed , work for both customer and worker
     @PutMapping("/updateBookingStatus/{id}")

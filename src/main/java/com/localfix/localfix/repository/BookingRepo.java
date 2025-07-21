@@ -19,4 +19,5 @@ public interface BookingRepo extends JpaRepository<Booking, Integer> {
     @Query("SELECT COUNT(b) FROM Booking b WHERE b.profile.id = :profileId AND b.status = 'completed'")
     int countCompletedJobsByProfile(@Param("profileId") int profileId);
 
+    List<Booking> findByProfile(Profile profile);
 }

@@ -87,6 +87,11 @@ public class UserService {
                     userDto.setEmail(user.getEmail());
                     userDto.setRole(user.getRole());
 
+                    Profile profile = profileRepo.findById(user.getId()).orElseThrow(()-> new RuntimeException("Profile not found!"));
+                    userDto.setName(profile.getName());
+                    userDto.setLocation(profile.getLocation());
+                    userDto.setServiceCategory(profile.getServiceCategory());
+
                     return  userDto;
                 }).toList();
 
@@ -138,4 +143,6 @@ public class UserService {
             }
 
     }
+
+
 }

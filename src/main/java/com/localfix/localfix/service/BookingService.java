@@ -177,4 +177,38 @@ public class BookingService {
             return new Response("You must login first!", false);
         }
     }
+
+    public ResponseEntity<List<BookingDto>> getAllBookingsOfEachWorker(String token, int id) {
+        if (!tokenBlackList.isTokenBlacklisted(token)) {
+
+            try{
+
+                Profile profile = profileRepo.findById(id).orElseThrow(()-> new RuntimeException("no profile found"));
+                List<Booking> bookings = bookingRepo.findByProfile(profile);
+                List<BookingDto> bookingDtos = bookings.stream().map(booking -> {
+
+                    BookingDto bookingDto = new BookingDto();
+                    bookingDto.setId(booking.getId());
+                    bookingDto.setBookedDate(booking.getBookedDate());
+                    bookingDto.setBookingDate(booking.getBookingDate());
+                    bookingDto.setBookingTime(booking.getBookingTime());
+                    bookingDto.setDescription(booking.getDescription());
+                    bookingDto.setUrgency(booking.getUrgency());
+                    bookingDto.setLocation(booking.getLocation());
+                    bookingDto.setPhoneNumber(booking.getPhoneNumber());
+                    bookingDto.setStatus(booking.getStatus());
+
+                    return bookingDto;
+                }).toList();
+
+                return ResponseEntity.ok(bookingDtos);
+
+            } catch (RuntimeException e) {
+                throw new RuntimeException("cant get bookings : " + e.getMessage());
+            }
+
+        }else {
+            throw new RuntimeException("You must login first");
+        }
+    }
 }
