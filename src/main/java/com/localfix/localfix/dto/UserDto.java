@@ -17,4 +17,6 @@ public class UserDto {
     private String name;
     private String serviceCategory;
     private String location;
+    private String profileImage;
+    private double averageRating;
 }

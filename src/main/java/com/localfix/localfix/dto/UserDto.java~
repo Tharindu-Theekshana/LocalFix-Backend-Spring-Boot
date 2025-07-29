@@ -14,4 +14,7 @@ public class UserDto {
     private String password;
     private String confirmPassword;
     private String role;
+    private String name;
+    private String serviceCategory;
+    private String location;
 }

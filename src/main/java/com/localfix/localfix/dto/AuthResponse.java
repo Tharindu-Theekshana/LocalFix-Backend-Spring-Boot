@@ -16,4 +16,5 @@ public class AuthResponse {
     private String role;
     private boolean isLoggedIn;
     private Integer userId;
+    private String email;
 }

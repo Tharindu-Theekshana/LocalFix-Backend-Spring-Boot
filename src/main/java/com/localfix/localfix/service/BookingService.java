@@ -136,6 +136,7 @@ public class BookingService {
                     bookingDto.setLocation(booking.getLocation());
                     bookingDto.setPhoneNumber(booking.getPhoneNumber());
                     bookingDto.setStatus(booking.getStatus());
+                    bookingDto.setProfileId(booking.getProfile().getId());
 
                     return bookingDto;
                 }).toList();

@@ -36,11 +36,11 @@ public class AuthSerice {
     public AuthResponse register(UserDto userDto) {
 
         if(userRepo.existsByEmail(userDto.getEmail())){
-            return new AuthResponse("User already exists", false,null,null,false,null);
+            return new AuthResponse("User already exists", false,null,null,false,null,null);
         }
 
         if(!userDto.getPassword().equals(userDto.getConfirmPassword())){
-            return new AuthResponse("Passwords do not match", false,null,null,false,null);
+            return new AuthResponse("Passwords do not match", false,null,null,false,null,null);
         }
 
         try{
@@ -51,10 +51,10 @@ public class AuthSerice {
             user.setRole(userDto.getRole());
 
             User registeredUser = userRepo.save(user);
-            return new AuthResponse("User " + registeredUser.getEmail() + " registered successfully", true,null,null,false, null);
+            return new AuthResponse("User " + registeredUser.getEmail() + " registered successfully", true,null,null,false, null,null);
 
         }catch (Exception e){
-            return new AuthResponse(("cant register user! : " + e.getMessage()), false,null,null,false,null);
+            return new AuthResponse(("cant register user! : " + e.getMessage()), false,null,null,false,null,null);
         }
     }
 
@@ -71,32 +71,32 @@ public class AuthSerice {
             if(authentication.isAuthenticated()){
 
                 String token = jwtService.generateToken(user.getEmail());
-                return new AuthResponse("User " + user.getEmail() + " logged in successfully", true,token,user.getRole(),true, user.getId());
+                return new AuthResponse("User " + user.getEmail() + " logged in successfully", true,token,user.getRole(),true, user.getId(), user.getEmail());
             }else{
-                return new AuthResponse("User " + user.getEmail() + " logged in failed", false,null,null,false,null);
+                return new AuthResponse("User " + user.getEmail() + " logged in failed", false,null,null,false,null,null);
             }
 
         } catch (Exception e) {
-            return new AuthResponse(("cant login user! : " + e.getMessage()), false,null,null,false,null);
+            return new AuthResponse(("cant login user! : " + e.getMessage()), false,null,null,false,null,null);
         }
     }
 
     public AuthResponse logout(String token) {
 
         if(tokenBlackList.isTokenBlacklisted(token)){
-            return new AuthResponse("User already logged out", false,null,null,false,null);
+            return new AuthResponse("User already logged out", false,null,null,false,null,null);
         }
 
         try{
 
             if (token != null) {
                 tokenBlackList.blacklisToken(token);
-                return new AuthResponse("User logged out successfully", true,null,null,false,null);
+                return new AuthResponse(" logged out successfully", true,null,null,false,null,null);
             }
-            return new AuthResponse("Invalid token! ", false,null,null,false,null);
+            return new AuthResponse("Invalid token! ", false,null,null,false,null,null);
 
         } catch (Exception e) {
-            return new AuthResponse(("cant logout user! : " + e.getMessage()), false,null,null,false,null);
+            return new AuthResponse(("cant logout user! : " + e.getMessage()), false,null,null,false,null,null);
         }
     }
 }
